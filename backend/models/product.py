@@ -5,6 +5,7 @@ from database import Base
 import uuid
 from datetime import datetime
 
+# klasa kategorii (slug to ta nazwa w url co jest)
 class Category(Base):
     __tablename__ = "categories"
 
@@ -14,11 +15,13 @@ class Category(Base):
     opis = Column(Text)
     parent_id = Column(UUID(as_uuid=True), ForeignKey("categories.id"), nullable=True)
 
+#klasa produktow 
+
 class Product(Base):
     __tablename__ = "products"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    publisher_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
+    publisher_id = Column(UUID(as_uuid=True), ForeignKey("users.id")) #tu tez nie wiem czy potrzebujemy w sumie 
     tytul = Column(String(200), nullable=False)
     slug = Column(String(200), unique=True)
     opis = Column(Text)
