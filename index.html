@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Sklep z grami</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎮</div>
+                <span class="logo-text">GameVault</span>
+            </a>
+            
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">
+                    🏪 Sklep
+                </a>
+                <span class="nav-link disabled" title="Dostępne w kolejnej części">
+                    📚 Biblioteka
+                </span>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="icon-btn" title="Szukaj">
+                    🔍
+                </button>
+                <button class="icon-btn" title="Koszyk">
+                    🛒
+                    <span class="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="margin-top: 20px;">
+        <div class="progress-info">
+            <span>📊 Sprint 1 - Postęp:</span>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 50%;"></div>
+            </div>
+            <span class="progress-text">50%</span>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Witaj w <span>GameVault</span></h1>
+                <p>Odkryj tysiące gier w najlepszych cenach. Twoja przygoda zaczyna się tutaj!</p>
+                
+                <div class="search-bar">
+                    <div class="search-input-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Szukaj gier...">
+                    </div>
+                    <button class="btn btn-secondary">🎚️ Filtry</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Promotions Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon promo">🔥</div>
+                <div>
+                    <h2 class="section-title">Gorące promocje</h2>
+                    <p class="section-subtitle">Nie przegap najlepszych ofert!</p>
+                </div>
+            </div>
+            
+            <div class="games-grid">
+                <!--Cyberpunk 2077 -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=600&fit=crop" alt="Cyberpunk 2077">
+                        <span class="game-badge discount">-50%</span>
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">Cyberpunk 2077</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">RPG</span>
+                            <span class="genre-tag">Akcja</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.5</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">149,99 zł</span>
+                                <span class="price-original">299,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--The Witcher 3 -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=600&fit=crop" alt="The Witcher 3">
+                        <span class="game-badge discount">-38%</span>
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">The Witcher 3: Wild Hunt</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">RPG</span>
+                            <span class="genre-tag">Fantasy</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.9</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">79,99 zł</span>
+                                <span class="price-original">129,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--God of War Ragnarok -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?w=400&h=600&fit=crop" alt="God of War Ragnarok">
+                        <span class="game-badge discount">-20%</span>
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">God of War Ragnarok</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">Akcja</span>
+                            <span class="genre-tag">Fantasy</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.9</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">279,99 zł</span>
+                                <span class="price-original">349,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Starfield -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&h=600&fit=crop" alt="Starfield">
+                        <span class="game-badge discount">-14%</span>
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">Starfield</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">RPG</span>
+                            <span class="genre-tag">Sci-Fi</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.2</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">299,99 zł</span>
+                                <span class="price-original">349,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Featured Games Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon featured">✨</div>
+                <div>
+                    <h2 class="section-title">Polecane gry</h2>
+                    <p class="section-subtitle">Najpopularniejsze tytuły w tym miesiącu</p>
+                </div>
+            </div>
+            
+            <div class="games-grid">
+                <!--Elden Ring -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b2b0b?w=400&h=600&fit=crop" alt="Elden Ring">
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">Elden Ring</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">RPG</span>
+                            <span class="genre-tag">Akcja</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.7</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">249,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Red Dead Redemption 2 -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=600&fit=crop" alt="Red Dead Redemption 2">
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">Red Dead Redemption 2</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">Akcja</span>
+                            <span class="genre-tag">Open World</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.8</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">199,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Hogwarts Legacy -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=400&h=600&fit=crop" alt="Hogwarts Legacy">
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">Hogwarts Legacy</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">RPG</span>
+                            <span class="genre-tag">Fantasy</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.6</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">229,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Horizon Forbidden West -->
+                <article class="game-card">
+                    <div class="game-card-image">
+                        <img src="https://images.unsplash.com/photo-1493711662062-fa541f7f3d24?w=400&h=600&fit=crop" alt="Horizon Forbidden West">
+                        <div class="game-card-overlay">
+                            <span class="coming-soon">🔍 Szczegóły wkrótce</span>
+                        </div>
+                    </div>
+                    <div class="game-card-content">
+                        <h3 class="game-card-title">Horizon Forbidden West</h3>
+                        <div class="game-card-genres">
+                            <span class="genre-tag">RPG</span>
+                            <span class="genre-tag">Sci-Fi</span>
+                        </div>
+                        <div class="game-card-rating">
+                            <span class="star">⭐</span>
+                            <span class="rating-value">4.7</span>
+                            <span class="rating-max">/ 5.0</span>
+                        </div>
+                        <div class="game-card-footer">
+                            <div class="game-price">
+                                <span class="price-current">199,99 zł</span>
+                            </div>
+                            <button class="btn-cart" title="Dodaj do koszyka">🛒</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 GameVault. Wszelkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+</body>
+</html>
