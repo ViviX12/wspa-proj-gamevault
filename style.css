@@ -1,416 +1,641 @@
-
+:root {
+    --bg: #1b2838;
+    --bg-dark: #111820;
+    --panel: #172230;
+    --panel-2: #1f2f40;
+    --line: rgba(255, 255, 255, 0.08);
+    --text: #f3f5f7;
+    --muted: #b7c0cb;
+    --accent: #7bc043;
+    --accent-hover: #69a936;
+    --yellow: #f0c84b;
+    --blue: #87d5f2;
+    --card: #e8e8e8;
+    --card-dark: #d9d9d9;
+    --price: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --max-width: 1320px;
+}
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #1a2332;
-    color: #ffffff;
-    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
 }
 
 a {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+.page {
+    min-height: 100vh;
+    width: 100%;
+    background: var(--bg);
 }
 
 .header {
-    background-color: #141c28;
-    padding: 0 24px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #ffd700;
-}
-
-.logo-icon {
-    width: 28px;
-    height: 28px;
-    background-color: #ffd700;
-    border-radius: 4px;
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(to bottom, #121920, #0f151c);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.header-inner {
+    width: min(var(--max-width), calc(100% - 32px));
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo {
+    font-size: 32px;
     font-weight: 800;
-    color: #000;
-    font-size: 1rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.logo .game {
+    color: #5d63ff;
+}
+
+.logo .vault {
+    color: #e8b63c;
 }
 
 .nav {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 0;
+    margin-left: 10px;
+    border-left: 1px solid var(--line);
 }
 
-.nav-link {
-    padding: 8px 16px;
-    color: #a0aec0;
-    font-size: 0.9rem;
-    border-radius: 4px;
-    transition: all 0.2s;
+.nav a {
+    padding: 16px 22px;
+    font-size: 15px;
+    color: #d8dde4;
+    border-right: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.01);
 }
 
-.nav-link:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.05);
+.nav a:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.nav-link.active {
-    color: #ffffff;
+.search {
+    margin-left: auto;
+    width: 260px;
+    height: 28px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #24303d;
+    color: #dfe6ee;
+    padding: 0 14px;
+    outline: none;
+    font-size: 13px;
+}
+
+.search::placeholder {
+    color: #97a3af;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
+    margin-left: 10px;
+    white-space: nowrap;
+    color: #cfd7df;
+    font-size: 13px;
 }
 
-.search-box {
-    background-color: #0d1520;
-    border-radius: 4px;
-    padding: 0 12px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    width: 200px;
-}
-
-.search-box input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    font-size: 0.85rem;
+.page-main {
     width: 100%;
-}
-
-.search-box input::placeholder {
-    color: #5a6a7a;
-}
-
-.search-icon {
-    color: #5a6a7a;
-    margin-right: 8px;
-}
-
-.header-icons {
     display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.icon-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    cursor: pointer;
-    color: #a0aec0;
-    transition: all 0.2s;
+    background: var(--bg);
 }
 
-.icon-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+.main-inner {
+    width: min(var(--max-width), calc(100% - 32px));
+    padding: 10px 0 24px;
+    display: block;
 }
 
-.avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #3a4a5a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.store-layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
 }
 
-/* ========== MAIN LAYOUT ========== */
-.main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* ========== PROMO BANNER ========== */
 .promo-banner {
-    background: linear-gradient(90deg, #ffcc00 0%, #66b3ff 100%);
-    border-radius: 8px;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.promo-text {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #000;
-}
-
-.promo-btn {
-    background-color: #141c28;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.promo-btn:hover {
-    opacity: 0.9;
-}
-
-/* ========== RECOMMENDATIONS ========== */
-.recommendations {
-    background-color: #141c28;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.rec-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
-
-.rec-title {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.rec-nav {
-    display: flex;
-    gap: 8px;
-}
-
-.nav-btn {
-    width: 36px;
+    width: 100%;
+    max-width: 370px;
     height: 36px;
-    border-radius: 50%;
-    background-color: #1a2332;
-    border: 1px solid #2a3a4a;
-    color: #a0aec0;
-    cursor: pointer;
+    margin: 6px auto 10px;
+    background: linear-gradient(90deg, #8cd6f2 0%, #f2d35d 100%);
+    color: #1d1d1d;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    transition: all 0.2s;
+    justify-content: space-between;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: var(--shadow);
 }
 
-.nav-btn:hover {
-    background-color: #2a3a4a;
-    color: #ffffff;
+.promo-banner strong {
+    color: #f5a623;
+    font-size: 16px;
+    margin-left: 8px;
 }
 
-.games-carousel-wrapper {
-    position: relative;
+.promo-banner .btn-link {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1b1b1b;
 }
 
-.games-carousel {
+.section {
+    width: 100%;
+    max-width: 370px;
+    margin: 0 auto 14px;
+}
+
+.section-title {
     display: flex;
-    gap: 16px;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.section-title h2 {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text);
+}
+
+.section-title span {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.cards-row {
+    display: flex;
+    gap: 10px;
     overflow-x: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.24) rgba(255,255,255,0.06);
 }
 
-.games-carousel::-webkit-scrollbar {
-    display: none;
+.cards-row::-webkit-scrollbar {
+    height: 8px;
 }
 
-/* ========== GAME CARD ========== */
+.cards-row::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+}
+
+.cards-row::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+}
+
 .game-card {
-    flex: 0 0 calc(33.333% - 11px);
-    min-width: 280px;
-    background-color: #1a2332;
-    border-radius: 8px;
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+}
+
+.game-thumb {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(to bottom, #efefef 0%, #e9e9e9 70%, #bfbfbf 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 -18px 28px rgba(0, 0, 0, 0.15);
+    position: relative;
     overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.game-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.game-image {
-    aspect-ratio: 16/9;
-    background-color: #2a3a4a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    color: #555;
-}
-
-.game-info {
-    padding: 14px;
-    background-color: #0d1520;
+.game-thumb::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 38px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent);
 }
 
 .game-title {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #ffffff;
-    margin-bottom: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.15;
 }
 
 .game-price {
-    font-size: 0.9rem;
-    color: #ffd700;
-    font-weight: 600;
+    margin-top: 3px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--price);
 }
 
-/* ========== TOP 100 SECTION ========== */
-.top100-section {
-    background-color: #141c28;
-    border-radius: 8px;
-    padding: 20px;
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 6px;
 }
 
-.top100-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 16px;
+.carousel-dots span {
+    width: 18px;
+    height: 5px;
+    background: #677381;
+    display: block;
+    border-radius: 2px;
 }
 
-.top-list {
+.carousel-dots span.active {
+    background: #f5f5f5;
+}
+
+.top100 {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.top100-list {
     display: flex;
     flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--line);
 }
 
-.top-item {
-    display: flex;
+.top100-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
     align-items: center;
     gap: 12px;
-    padding: 12px 8px;
-    border-bottom: 1px solid #2a3a4a;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    height: 46px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
 }
 
-.top-item:last-child {
-    border-bottom: none;
+.top100-item .mini-thumb {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(to bottom, #efefef, #cccccc);
+    display: grid;
+    place-items: center;
+    color: #111;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.top-item:hover {
-    background-color: rgba(255, 255, 255, 0.02);
+.top100-item .name {
+    font-size: 15px;
+    font-weight: 400;
 }
 
-.top-rank {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #5a6a7a;
-    width: 24px;
-    text-align: center;
+.top100-item .price {
+    font-size: 14px;
+    color: #ffffff;
+    padding-right: 6px;
 }
 
-.top-icon {
-    width: 44px;
-    height: 44px;
-    background-color: #2a3a4a;
-    border-radius: 4px;
+.products-area {
+    width: 100%;
+    max-width: 370px;
+}
+
+.product-view {
+    width: 100%;
+    max-width: 370px;
+    margin: 12px auto 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: start;
+    display: none;
+}
+
+.product-view:target {
+    display: grid;
+}
+
+.products-area:not(:has(.product-view:target)) .default-product {
+    display: grid;
+}
+
+.product-gallery {
+    width: 100%;
+}
+
+.product-main-image {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(to bottom, #efefef, #d9d9d9);
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.product-thumbs {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    color: #555;
+    gap: 4px;
+    margin-top: 6px;
 }
 
-.top-info {
-    flex: 1;
-    min-width: 0;
+.arrow-btn {
+    width: 12px;
+    height: 28px;
+    background: #66707d;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
 }
 
-.top-name {
-    font-size: 0.9rem;
-    font-weight: 500;
+.thumb {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(to bottom, #efefef, #d0d0d0);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    color: #111;
+}
+
+.product-info {
+    width: 100%;
+}
+
+.product-title {
+    font-size: 24px;
+    line-height: 1.02;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.product-meta {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.3;
+    margin-bottom: 6px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
     color: #ffffff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 14px;
 }
 
-.top-price {
-    font-size: 0.9rem;
-    color: #a0aec0;
+.stars {
+    color: var(--yellow);
+    letter-spacing: 1px;
+    font-size: 14px;
 }
 
-.top-price.free {
-    color: #4ade80;
+.product-desc {
+    font-size: 13px;
+    line-height: 1.35;
+    color: #e6ebf0;
+    margin-bottom: 10px;
 }
 
-@media (max-width: 900px) {
-    .game-card {
-        flex: 0 0 calc(50% - 8px);
-        min-width: 220px;
+.price-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.old-price {
+    color: #a8b0b8;
+    text-decoration: line-through;
+    font-size: 13px;
+}
+
+.new-price {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.discount {
+    background: #9b8b2e;
+    color: #fff;
+    font-size: 13px;
+    padding: 2px 6px;
+}
+
+.buy-btn {
+    display: inline-block;
+    background: linear-gradient(to bottom, #7ad956, #59b92f);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+}
+
+.buy-btn:hover {
+    background: linear-gradient(to bottom, #8ae265, #68c437);
+}
+
+@media (min-width: 768px) {
+    .main-inner {
+        width: min(var(--max-width), calc(100% - 48px));
+    }
+
+    .section,
+    .promo-banner,
+    .products-area,
+    .product-view {
+        max-width: 740px;
+    }
+
+    .game-thumb {
+        height: 200px;
+    }
+
+    .product-main-image {
+        height: 220px;
+    }
+
+    .product-title {
+        font-size: 34px;
+    }
+
+    .new-price {
+        font-size: 30px;
     }
 }
 
-@media (max-width: 600px) {
-    .header {
-        padding: 0 16px;
+@media (min-width: 1200px) {
+    .main-inner {
+        width: min(var(--max-width), calc(100% - 64px));
     }
-    
-    .header-left {
-        gap: 20px;
+
+    .section,
+    .promo-banner,
+    .products-area,
+    .product-view {
+        max-width: 860px;
     }
-    
-    .nav {
-        display: none;
+
+    .cards-row {
+        gap: 14px;
     }
-    
-    .search-box {
-        width: 140px;
+
+    .game-thumb {
+        height: 230px;
     }
-    
-    .main {
-        padding: 16px;
+
+    .product-view {
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 16px;
     }
-    
-    .game-card {
-        flex: 0 0 100%;
-        min-width: 100%;
+
+    .product-main-image {
+        height: 260px;
     }
-    
-    .promo-banner {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
+
+    .product-title {
+        font-size: 40px;
+    }
+
+    .product-desc {
+        font-size: 14px;
+    }
+}
+.top100-large {
+    width: 100%;
+    max-width: 860px;
+}
+
+.top100-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    width: 100%;
+}
+
+.top100-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    min-height: 70px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 6px 0;
+    color: #fff;
+}
+
+.top100-item .mini-thumb {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(to bottom, #efefef, #cccccc);
+    display: grid;
+    place-items: center;
+    color: #111;
+    font-size: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.top100-item .name {
+    font-size: 26px;
+    line-height: 1.1;
+}
+
+.top100-item .price {
+    font-size: 20px;
+    padding-right: 6px;
+}
+
+.top100-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.top100-page-btn {
+    min-width: 42px;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #223243;
+    color: #dfe6ee;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.top100-page-btn.active {
+    background: #3a5169;
+    color: #fff;
+}
+
+.top100-page-btn:hover {
+    background: #2c4155;
+}
+
+@media (max-width: 767px) {
+    .top100-item {
+        grid-template-columns: 48px 1fr auto;
+        gap: 10px;
+        min-height: 56px;
+    }
+
+    .top100-item .mini-thumb {
+        width: 48px;
+        height: 48px;
+        font-size: 14px;
+    }
+
+    .top100-item .name {
+        font-size: 18px;
+    }
+
+    .top100-item .price {
+        font-size: 16px;
     }
 }
