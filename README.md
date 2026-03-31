@@ -37,7 +37,7 @@ GameVault to sklep internetowy z grami cyfrowymi. Użytkownicy mogą przegląda�
 
 ## Technologie
 
-Frontend: HTML, CSS, JavaScript
+Frontend: React (Vite), JavaScript (ES6+), HTML5, CSS3, react-router-dom
 
 Backend: Python, FastAPI, SQLAlchemy
 
@@ -74,7 +74,7 @@ Sprint 4 | Testy, poprawki, prezentacja | 12.05.2026
 
 ## Architektura projektu
 
-Aplikacja działa w architekturze klient-serwer. Frontend to statyczne strony HTML/CSS/JS które komunikują się z backendem przez REST API. Backend napisany w FastAPI obsługuje całą logikę – rejestrację, logowanie, zakupy i bibliotekę. Dane przechowywane są w bazie PostgreSQL. Autoryzacja opiera się na tokenach JWT – po zalogowaniu użytkownik dostaje token który wysyła przy każdym zapytaniu wymagającym logowania.
+Aplikacja działa w architekturze klient-serwer. Frontend to nowoczesna aplikacja typu SPA (Single Page Application) zbudowana w bibliotece React przy użyciu narzędzia Vite. Interfejs użytkownika opiera się na komponentach (m.in. Shop, Product, Library) i wykorzystuje react-router-dom do dynamicznej nawigacji bez przeładowywania strony. Aplikacja kliencka komunikuje się z backendem za pomocą zapytań HTTP (REST API), co pozwala na dynamiczne pobieranie katalogu gier i zarządzanie kontem użytkownika. Backend napisany w FastAPI obsługuje całą logikę – rejestrację, logowanie, zakupy i bibliotekę. Dane przechowywane są w bazie PostgreSQL. Autoryzacja opiera się na tokenach JWT – po zalogowaniu użytkownik dostaje token który wysyła przy każdym zapytaniu wymagającym logowania.
 
 ---
 
@@ -109,7 +109,11 @@ SECRET_KEY=twoj_tajny_klucz
 ```
 
 ---
-
+5. Instalacja środowiska frontend:
+```
+cd ../sklep
+npm install
+```  
 ## Uruchomienie aplikacji
 
 ### Backend
@@ -122,9 +126,13 @@ Backend działa na http://127.0.0.1:8000
 Dokumentacja API dostępna na http://127.0.0.1:8000/docs
 
 ### Frontend
-Otwórz plik index.html w przeglądarce.
+```
+cd sklep
+npm run dev
+```
+Frontend uruchomi się na lokalnym serwerze (domyślnie http://localhost:5173/). 
+Aplikacja połączy w sobie logikę JS i style przygotowane w projekcie.
 
----
 
 ## Instrukcja użytkownika
 
@@ -155,7 +163,16 @@ wspa-proj-gamevault/
 │   ├── database.py           – konfiguracja bazy danych
 │   ├── main.py               – główny plik aplikacji
 │   └── seed.py               – dane testowe
-├── sklep/                    – interfejs użytkownika
+├── sklep/                    – frontend aplikacji (React + Vite)
+│   ├── public/               – pliki statyczne
+│   ├── src/                  – kod źródłowy aplikacji
+│   │   ├── components/       – komponenty widoków (Shop.jsx, Product.jsx, Library.jsx)
+│   │   ├── data/             – tymczasowe mocki danych (mockData.js)
+│   │   ├── App.jsx           – główny router i layout aplikacji
+│   │   ├── main.jsx          – punkt wejścia Reacta
+│   │   └── style.css         – globalne style aplikacji (design system)
+│   ├── index.html            – główny kontener HTML
+│   └── package.json          – konfiguracja paczek npm
 ├── requirements.txt          – biblioteki Python
 ├── .gitignore
 └── README.md
