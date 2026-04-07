@@ -23,6 +23,11 @@
     padding: 0;
 }
 
+html {
+  /* To sprawia, że strona płynnie "zjeżdża" zamiast przeskakiwać */
+  scroll-behavior: smooth !important;
+}
+
 html, body {
     width: 100%;
     min-height: 100%;
@@ -33,6 +38,8 @@ body {
     background: var(--bg);
     color: var(--text);
     overflow-x: hidden;
+    overflow-y: auto !important;
+    height: auto !important;
 }
 
 a {
@@ -654,4 +661,22 @@ img {
 
 .animate-fade-in {
   animation: smoothFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Odblokowanie kontenerów, aby pozwoliły stronie się przewijać */
+.page, .page-main, .main-inner {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+
+/* Fix dla baneru, żeby przycisk był zawsze klikalny */
+.promo-banner {
+  position: relative;
+  z-index: 5;
+}
+
+.promo-banner .btn-link {
+  cursor: pointer;
+  pointer-events: auto;
 }

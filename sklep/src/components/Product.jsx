@@ -1,76 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { mockGames } from '../data/mockData.js';
+
+const imageMapper = {
+  "Cyberpunk 2077": "/img/gra1.jpg", "Wiedźmin 3": "/img/gra2.jpg", "EA FC 26": "/img/gra3.jpg",
+  "Grand Theft Auto V": "/img/gra4.jpg", "Red Dead Redemption 2": "/img/gra5.jpg",
+  "Counter-Strike 2": "/img/gra6.jpg", "Hogwarts Legacy": "/img/gra7.jpg", "Minecraft": "/img/gra8.jpg"
+};
 
 export default function Product() {
   const { id } = useParams();
-  const game = mockGames.find(g => g.id === id);
-  
-  // Prosty stan, żeby zmienić tekst po kliknięciu "Dodaj do koszyka"
-  const [addedToCart, setAddedToCart] = useState(false);
+  const [game, setGame] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!game) return <h2 style={{ color: 'white', textAlign: 'center', marginTop: '50px' }}>Błąd 404: Nie znaleziono gry!</h2>;
+  useEffect(() => {
+    fetch('http://localhost:8000/products')
+      .then(res => res.json())
+      .then(data => {
+        const found = data.find(p => p.id === id);
+        if (found) setGame({ ...found, imageUrl: imageMapper[found.tytul] || "/img/gra1.jpg" });
+        setLoading(false);
+      });
+  }, [id]);
 
-  const handleAddToCart = () => {
-    setAddedToCart(true);
-    // Reset po 2 sekundach
-    setTimeout(() => setAddedToCart(false), 2000);
-  };
+  if (loading) return <div style={{ color: 'white', textAlign: 'center', padding: '50px' }}>Ładowanie...</div>;
 
   return (
-    <section className="product-page-single animate-fade-in">
-      <div className="back-link-wrap">
-        <Link to="/" className="back-link">← Powrót do sklepu</Link>
-      </div>
-
-      <div className="product-view product-view-single" style={{ display: 'grid' }}>
-        
-        {/* Wyświetlanie samej okładki (zrezygnowaliśmy z karuzeli, żeby było czytelniej) */}
-        <div className="product-gallery" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="product-main-image" style={{ aspectRatio: '1/1', overflow: 'hidden', borderRadius: '4px', backgroundColor: '#1a2634', border: '1px solid #ffffff1a', width: '100%', maxWidth: '450px' }}>
-            <img 
-              src={game.imageUrl} 
-              alt={game.title} 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-            />
-          </div>
+    <section className="animate-fade-in" style={{ padding: '20px 0' }}>
+      <Link to="/" style={{ color: '#aaa', display: 'block', marginBottom: '20px' }}>← Powrót do sklepu</Link>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+        <div className="product-main-image" style={{ height: 'auto' }}>
+          <img src={game.imageUrl} alt={game.tytul} style={{ width: '100%', borderRadius: '8px' }} />
         </div>
-
-        <div className="product-info">
-          <h1 className="product-title">{game.title}</h1>
-
-          <div className="product-meta">
-            Wydanie: Cyfrowe<br />
-            Sprzedaż: {game.sales} kopii<br />
-            Status: {game.isOwned ? <span style={{color: '#7bc043'}}>W bibliotece</span> : "Brak w bibliotece"}<br />
-          </div>
-
-          <div className="rating">
-            <div className="stars" style={{ color: '#f0c84b' }}>★★★★★</div>
-            <div>(Brak recenzji)</div>
-          </div>
-
-          <div className="product-desc" style={{ marginTop: '20px', lineHeight: '1.6' }}>
-            {game.description}
-          </div>
-
-          <div className="price-row" style={{ marginTop: '30px', marginBottom: '20px' }}>
-            <span className="new-price" style={{ fontSize: '24px', fontWeight: 'bold' }}>
-              {game.price === 0 ? "Darmowa" : `${game.price} zł`}
-            </span>
-          </div>
-
-          {/* Obsługa przycisku kupowania */}
-          <button 
-            className="buy-btn" 
-            onClick={handleAddToCart}
-            style={{ 
-              backgroundColor: addedToCart ? '#7bc043' : '', 
-              transition: 'background-color 0.3s ease',
-              cursor: 'pointer'
-            }}
-          >
-            {addedToCart ? '✓ Dodano do koszyka!' : 'Dodaj do koszyka'}
+        <div>
+          <h1 className="product-title" style={{ fontSize: '48px' }}>{game.tytul}</h1>
+          <p className="product-desc" style={{ fontSize: '16px', color: '#b7c0cb', margin: '20px 0' }}>{game.opis}</p>
+          <div className="new-price">{game.current_price} zł</div>
+          <button className="buy-btn" onClick={() => alert("Produkt dodany do koszyka!\n\nSystem płatności online zostanie wdrożony w Sprincie 4 (Final Implementation).")} style={{ padding: '15px 40px', fontSize: '18px', marginTop: '20px' }}>
+            DODAJ DO KOSZYKA
           </button>
         </div>
       </div>

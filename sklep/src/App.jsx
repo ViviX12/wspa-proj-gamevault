@@ -1,73 +1,79 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Shop from './components/Shop.jsx';
-import Product from './components/Product.jsx';
-import Library from './components/Library.jsx';
-import './style.css'; 
+import { Routes, Route, Link } from 'react-router-dom';
+import Shop from './components/Shop';
+import Library from './components/Library';
+import Product from './components/Product';
+import './style.css';
 
 export default function App() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Nowy stan dla menu!
+  const [globalSearchQuery, setGlobalSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Funkcja wymuszająca "twarde" przeładowanie strony
+  const handleHardRefresh = (targetPath) => {
+    if (window.location.pathname === targetPath) {
+      window.location.href = targetPath;
+    } else {
+      setGlobalSearchQuery('');
+    }
+  };
+
+  const handleFutureFeature = (feature) => {
+    alert(`${feature} zostanie wdrożony w Sprincie 4 (Final Phase).`);
+  };
 
   return (
-    <Router>
-      <div className="page">
-        <header className="header">
-          <div className="header-inner">
-            <Link to="/" className="logo">
-              <span className="game">Game</span><span className="vault">Vault</span>
+    <div className="page">
+      <header className="header">
+        <div className="header-inner">
+          <Link to="/" className="logo" onClick={() => handleHardRefresh('/')}>
+            <span className="game">GAME</span>
+            <span className="vault">VAULT</span>
+          </Link>
+
+          <nav className="nav">
+            <Link to="/" onClick={() => handleHardRefresh('/')}>SKLEP</Link>
+            <Link to="/library" onClick={() => handleHardRefresh('/library')}>BIBLIOTEKA</Link>
+            <Link to="#" onClick={(e) => { e.preventDefault(); handleFutureFeature("Moduł społecznościowy"); }}>
+              SPOŁECZNOŚĆ
             </Link>
+          </nav>
 
-            <nav className="nav">
-              <Link to="/">Sklep</Link>
-              <Link to="/library">Biblioteka</Link>
-              <Link to="#" onClick={() => alert("Moduł Społeczności planowany na Sprint 3!")}>Społeczność</Link>
-            </nav>
+          <input 
+            type="text" 
+            className="search" 
+            placeholder="Szukaj gier..." 
+            value={globalSearchQuery}
+            onChange={(e) => setGlobalSearchQuery(e.target.value)}
+          />
 
-            <input 
-              className="search" type="text" placeholder="Szukaj gry..." 
-              value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-            />
-
-            {/* OŻYWIONE MENU UŻYTKOWNIKA */}
-            <div className="header-right" style={{ position: 'relative' }}>
-              <div 
-                style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }} 
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                <span>☰</span>
-                <span>Bolit</span>
-                <span>◉</span>
+          {/*zakładka użytkownika z menu rozwijanym */}
+          <div className="header-right" style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            <span>Krzysztof Sosnówka ▼</span>
+            {isDropdownOpen && (
+              <div style={{ 
+                position: 'absolute', top: '100%', right: 0, background: '#172230', 
+                border: '1px solid rgba(255, 255, 255, 0.08)', padding: '10px', zIndex: 100, minWidth: '160px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)'
+              }}>
+                <div style={{ padding: '8px 0', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }} onClick={() => handleFutureFeature("Profil")}>Mój profil</div>
+                <div style={{ padding: '8px 0', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }} onClick={() => handleFutureFeature("Portfel")}>Portfel (0.00 zł)</div>
+                <div style={{ padding: '8px 0', color: '#ff4d4d' }}>Wyloguj</div>
               </div>
-              
-              {isMenuOpen && (
-                <div style={{ 
-                  position: 'absolute', top: '100%', right: 0, background: '#1f2f40', 
-                  border: '1px solid #ffffff1a', padding: '10px', borderRadius: '4px', 
-                  marginTop: '10px', zIndex: 100, display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '150px' 
-                }}>
-                  <Link to="/library" onClick={() => setIsMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Moja Biblioteka</Link>
-                  <Link to="#" onClick={(e) => { e.preventDefault(); alert("Opcje profilu zostaną podpięte po zintegrowaniu bazy danych (Sprint 2)."); setIsMenuOpen(false); }} style={{ color: '#fff', textDecoration: 'none' }}>Ustawienia Konta</Link>
-                  <hr style={{ borderColor: '#ffffff1a', margin: '4px 0' }} />
-                  <Link to="#" onClick={(e) => { e.preventDefault(); alert("Wylogowano pomyślnie! (Symulacja)"); setIsMenuOpen(false); }} style={{ color: '#ff4d4d', textDecoration: 'none' }}>Wyloguj się</Link>
-                </div>
-              )}
-            </div>
-            {/* KONIEC MENU */}
-            
+            )}
           </div>
-        </header>
+        </div>
+      </header>
 
-        <main className="page-main">
-          <div className="main-inner">
-            <Routes>
-              <Route path="/" element={<Shop searchQuery={searchQuery} />} />
-              <Route path="/game/:id" element={<Product />} />
-              <Route path="/library" element={<Library />} />
-            </Routes>
-          </div>
-        </main>
-      </div>
-    </Router>
+      <main className="page-main">
+        <div className="main-inner">
+          <Routes>
+            <Route path="/" element={<Shop searchQuery={globalSearchQuery} />} />
+            <Route path="/library" element={<Library />} />
+            <Route path="/game/:id" element={<Product />} />
+          </Routes>
+        </div>
+      </main>
+    </div>
   );
 }
