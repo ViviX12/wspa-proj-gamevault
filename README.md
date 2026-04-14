@@ -66,7 +66,7 @@ Sprint 4 | Testy, poprawki, prezentacja | 12.05.2026
 - [x] Zakup gry
 - [x] Biblioteka zakupionych gier
 - [x] Historia zamówień
-- [ ] Recenzje produktów
+- [x] Recenzje produktów
 - [ ] Wyszukiwanie i filtrowanie
 - [ ] Integracja z frontendem
 
@@ -154,11 +154,13 @@ wspa-proj-gamevault/
 │   │   ├── user.py           – użytkownicy
 │   │   ├── product.py        – produkty i kategorie
 │   │   ├── order.py          – zamówienia
-│   │   └── library.py        – biblioteka użytkownika
+│   │   ├── library.py        – biblioteka użytkownika
+│   │   └── reviews.py         – recenzje
 │   ├── routes/               – endpointy API
 │   │   ├── auth.py           – rejestracja i logowanie
 │   │   ├── products.py       – produkty
-│   │   └── orders.py         – zamówienia i biblioteka
+│   │   ├── orders.py         – zamówienia i biblioteka
+│   │   └── reviews.py        – recenzje
 │   ├── auth.py               – JWT i hashowanie haseł
 │   ├── database.py           – konfiguracja bazy danych
 │   ├── main.py               – główny plik aplikacji
@@ -191,12 +193,13 @@ wspa-proj-gamevault/
 | POST | /orders | Zakup produktu | Tak |
 | GET | /orders/{user_id} | Historia zamówień | Tak |
 | GET | /library/{user_id} | Biblioteka użytkownika | Tak |
-
+| GET | /reviews/{product_id} | Zwraca recenzje dla ID produktu | Tak |
+| POST | /reviews | Tworzenie recenzji | Tak |
 ---
 
 ## Status projektu
 
-Sprint 2 ukończony. Projekt w trakcie rozwoju.
+Sprint 1 ukończony. Projekt w trakcie rozwoju.
 
 ---
 
