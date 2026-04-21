@@ -46,7 +46,7 @@ export default function Shop({ searchQuery }) {
 
   const topBestsellers = [...games].sort((a, b) => b.sales - a.sales).slice(0, 5);
 
-  if (loading) return <div style={{ color: 'white', textAlign: 'center', padding: '50px' }}>Ładowanie...</div>;
+  if (loading) return <div style={{ color: 'white', textAlign: 'center', padding: '50px' }}>Ładowanie sklepu...</div>;
 
   return (
     <div className="store-layout">
@@ -63,15 +63,21 @@ export default function Shop({ searchQuery }) {
           <span>produkty z bazy danych</span>
         </div>
         <div className="cards-row">
-          {filteredGames.map(game => (
-            <Link to={`/game/${game.id}`} key={game.id} className="game-card">
-              <div className="game-thumb">
-                <img src={game.imageUrl} alt={game.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div className="game-title">{game.title}</div>
-              <div className="game-price">{game.price === 0 ? "FREE" : `${game.price} zł`}</div>
-            </Link>
-          ))}
+          {filteredGames.length > 0 ? (
+            filteredGames.map(game => (
+              <Link to={`/game/${game.id}`} key={game.id} className="game-card">
+                <div className="game-thumb">
+                  <img src={game.imageUrl} alt={game.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div className="game-title">{game.title}</div>
+                <div className="game-price">{game.price === 0 ? "FREE" : `${game.price} zł`}</div>
+              </Link>
+            ))
+          ) : (
+            <div style={{ padding: '40px', textAlign: 'center', width: '100%', color: '#97a3af', gridColumn: '1 / -1' }}>
+              Brak wyników w sklepie dla frazy: "{searchQuery}"
+            </div>
+          )}
         </div>
       </section>
 

@@ -7,25 +7,35 @@ const imageMapper = {
   "Counter-Strike 2": "/img/gra6.jpg", "Hogwarts Legacy": "/img/gra7.jpg", "Minecraft": "/img/gra8.jpg"
 };
 
-export default function Library() {
+// Dodano odbieranie searchQuery (domyślnie pusty ciąg, żeby nie rzucało błędami)
+export default function Library({ searchQuery = "" }) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [installingId, setInstallingId] = useState(null);
   const [progress, setProgress] = useState(0);
   const [installedGames, setInstalledGames] = useState([]);
 
   useEffect(() => {
     fetch('http://localhost:8000/products')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Błąd serwera");
+        return res.json();
+      })
       .then(data => {
         setGames(data.map(g => ({ id: g.id, title: g.tytul, imageUrl: imageMapper[g.tytul] || "/img/gra1.jpg" })));
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setError("Brak połączenia z bazą danych. Upewnij się, że serwer backendowy (Python) jest uruchomiony.");
         setLoading(false);
       });
   }, []);
 
   const handleAction = (gameId) => {
     if (installedGames.includes(gameId)) {
-      alert("Status: Gra jest gotowa.\n\nIntegracja z klientem desktopowym zostanie sfinalizowana w Sprincie 4.");
+      alert("Status: Gra jest gotowa do uruchomienia.\n\nModuł integracji z klientem desktopowym zostanie wdrożony w Sprincie 4.");
       return;
     }
     if (installingId === gameId) return;
@@ -39,24 +49,37 @@ export default function Library() {
     }, 400);
   };
 
-  if (loading) return <div style={{ color: 'white', textAlign: 'center', padding: '50px' }}>Ładowanie...</div>;
+  // Filtrowanie gier na podstawie paska wyszukiwania
+  const filteredGames = games.filter(g =>
+    g.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (loading) return <div style={{ color: 'white', textAlign: 'center', padding: '50px' }}>Ładowanie biblioteki...</div>;
+  if (error) return <div style={{ color: '#ff4d4d', textAlign: 'center', padding: '50px', fontSize: '18px' }}>{error}</div>;
 
   return (
     <section className="section my-library animate-fade-in" style={{ marginTop: '30px', maxWidth: '100%' }}>
       <div className="section-title">
         <h2>Moja Biblioteka</h2>
-        <span>Twoje gry ({games.length})</span>
+        <span>Twoje gry ({filteredGames.length})</span>
       </div>
       <div className="cards-row">
-        {games.map(game => (
-          <div key={game.id} className="game-card">
-            <div className="game-thumb"><img src={game.imageUrl} alt={game.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
-            <div className="game-title">{game.title}</div>
-            <button className="buy-btn" onClick={() => handleAction(game.id)} style={{ marginTop: '10px', width: '100%', background: installedGames.includes(game.id) ? '#1f2f40' : '#7bc043' }}>
-              {installingId === game.id ? `${progress}%` : (installedGames.includes(game.id) ? '▶ GRAJ' : '⬇ INSTALUJ')}
-            </button>
+        {/* Renderowanie gier lub komunikatu o braku wyników */}
+        {filteredGames.length > 0 ? (
+          filteredGames.map(game => (
+            <div key={game.id} className="game-card">
+              <div className="game-thumb"><img src={game.imageUrl} alt={game.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
+              <div className="game-title">{game.title}</div>
+              <button className="buy-btn" onClick={() => handleAction(game.id)} style={{ marginTop: '10px', width: '100%', background: installedGames.includes(game.id) ? '#1f2f40' : '#7bc043' }}>
+                {installingId === game.id ? `${progress}%` : (installedGames.includes(game.id) ? '▶ GRAJ' : '⬇ INSTALUJ')}
+              </button>
+            </div>
+          ))
+        ) : (
+          <div style={{ padding: '40px', textAlign: 'center', width: '100%', color: '#97a3af' }}>
+            Brak gier w bibliotece dla frazy: "{searchQuery}"
           </div>
-        ))}
+        )}
       </div>
     </section>
   );
