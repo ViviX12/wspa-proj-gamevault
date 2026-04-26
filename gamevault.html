@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Vault - Sklep</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <div class="header-inner">
+                <a href="sklep.html" class="logo">
+                    <span class="game">Game</span><span class="vault">Vault</span>
+                </a>
+
+                <nav class="nav">
+                    <a href="sklep.html">Sklep</a>
+                    <a href="#">Biblioteka</a>
+                    <a href="#">Społeczność</a>
+                </nav>
+
+                <input class="search" type="text" placeholder="Szukaj...">
+
+                <div class="header-right">
+                    <span>☰</span>
+                    <span>Użytkownik</span>
+                    <span>◉</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="page-main">
+            <div class="main-inner">
+                <div class="store-layout">
+                    <div class="promo-banner">
+                        <div>Letnia <strong>Wyprzedaż!</strong></div>
+                        <a href="#" class="btn-link">Sprawdź oferty</a>
+                    </div>
+
+                    <section class="section recommendations">
+                        <div class="section-title">
+                            <h2>Rekomendacje</h2>
+                            <span>dla ciebie</span>
+                        </div>
+
+                        <div class="cards-row">
+                            <a href="produkt-1.html" class="game-card">
+                                <div class="game-thumb"></div>
+                                <div class="game-title">Tytuł 1</div>
+                                <div class="game-price">59,99zł</div>
+                            </a>
+
+                            <a href="produkt-2.html" class="game-card">
+                                <div class="game-thumb"></div>
+                                <div class="game-title">Tytuł 2</div>
+                                <div class="game-price">24,99zł</div>
+                            </a>
+
+                            <a href="produkt-3.html" class="game-card">
+                                <div class="game-thumb"></div>
+                                <div class="game-title">Tytuł 3</div>
+                                <div class="game-price">119,99zł</div>
+                            </a>
+
+                            <a href="produkt-1.html" class="game-card">
+                                <div class="game-thumb"></div>
+                                <div class="game-title">Tytuł 4</div>
+                                <div class="game-price">89,99zł</div>
+                            </a>
+
+                            <a href="produkt-2.html" class="game-card">
+                                <div class="game-thumb"></div>
+                                <div class="game-title">Tytuł 5</div>
+                                <div class="game-price">39,99zł</div>
+                            </a>
+
+                            <a href="produkt-3.html" class="game-card">
+                                <div class="game-thumb"></div>
+                                <div class="game-title">Tytuł 6</div>
+                                <div class="game-price">149,99zł</div>
+                            </a>
+                        </div>
+
+                        <div class="carousel-dots">
+                            <span class="active"></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </section>
+
+                    <section class="section top100 top100-large">
+                        <div class="section-title">
+                            <h2>Top 100</h2>
+                            <span>w tym miesiącu</span>
+                        </div>
+
+                        <div id="top100-list" class="top100-list"></div>
+
+                        <div id="top100-pagination" class="top100-pagination"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const top100Data = Array.from({ length: 100 }, (_, i) => {
+            const index = i + 1;
+            return {
+                rank: index,
+                title: `Tytuł ${index}`,
+                price: `${(19 + index * 3).toFixed(2).replace('.', ',')}zł`,
+                link: `produkt-${((i % 3) + 1)}.html`
+            };
+        });
+
+        const itemsPerPage = 20;
+        let currentPage = 1;
+
+        const listEl = document.getElementById('top100-list');
+        const paginationEl = document.getElementById('top100-pagination');
+
+        function renderTop100(page) {
+            currentPage = page;
+
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = top100Data.slice(start, end);
+
+            listEl.innerHTML = pageItems.map(item => `
+                <a href="${item.link}" class="top100-item">
+                    <div class="mini-thumb">${item.rank}</div>
+                    <div class="name">${item.title}</div>
+                    <div class="price">${item.price}</div>
+                </a>
+            `).join('');
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pageCount = Math.ceil(top100Data.length / itemsPerPage);
+
+            paginationEl.innerHTML = Array.from({ length: pageCount }, (_, i) => {
+                const page = i + 1;
+                return `
+                    <button class="top100-page-btn ${page === currentPage ? 'active' : ''}" onclick="renderTop100(${page})">
+                        ${page}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        renderTop100(1);
+    </script>
+</body>
+</html>

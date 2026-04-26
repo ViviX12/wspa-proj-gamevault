@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Vault - Produkt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <div class="header-inner">
+                <a href="sklep.html" class="logo">
+                    <span class="game">Game</span><span class="vault">Vault</span>
+                </a>
+
+                <nav class="nav">
+                    <a href="sklep.html">Sklep</a>
+                    <a href="#">Biblioteka</a>
+                    <a href="#">Społeczność</a>
+                </nav>
+
+                <input class="search" type="text" placeholder="Szukaj...">
+
+                <div class="header-right">
+                    <span>☰</span>
+                    <span>Użytkownik</span>
+                    <span>◉</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="page-main">
+            <div class="main-inner">
+                <section class="product-page-single">
+                    <div class="back-link-wrap">
+                        <a href="sklep.html" class="back-link">← Powrót do sklepu</a>
+                    </div>
+
+                    <div class="product-view product-view-single">
+                        <div class="product-gallery">
+                            <div class="product-main-image" id="product-image-main">▣</div>
+
+                            <div class="product-thumbs">
+                                <div class="arrow-btn">‹</div>
+                                <div class="thumb">▣</div>
+                                <div class="thumb">▣</div>
+                                <div class="thumb">▣</div>
+                                <div class="thumb">▣</div>
+                                <div class="arrow-btn">›</div>
+                            </div>
+                        </div>
+
+                        <div class="product-info">
+                            <h1 id="product-title" class="product-title">Tytuł produktu</h1>
+
+                            <div id="product-meta" class="product-meta">
+                                Studio niezależne<br>
+                                Premiera: 2026<br>
+                                Gatunek: akcja
+                            </div>
+
+                            <div class="rating">
+                                <div class="stars" id="product-stars">★★★★★</div>
+                                <div id="product-rating">4.2/5</div>
+                            </div>
+
+                            <div id="product-desc" class="product-desc">
+                                Tutaj pojawi się opis produktu.
+                            </div>
+
+                            <div class="price-row">
+                                <span id="product-old-price" class="old-price">89,99zł</span>
+                                <span id="product-price" class="new-price">69,99zł</span>
+                                <span id="product-discount" class="discount">-22%</span>
+                            </div>
+
+                            <a href="#" class="buy-btn">Dodaj do koszyka</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

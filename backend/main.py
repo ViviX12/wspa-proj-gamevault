@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # <--- DODANO: Import CORS
 from database import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 import models.user
@@ -13,6 +14,15 @@ app = FastAPI(title="GameVault API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  #zmień na konkretny adres frontendu tam gdzie *
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# <--- DODANO: Konfiguracja CORS odblokowująca Reacta
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], # Adresy z których React pyta o dane
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
