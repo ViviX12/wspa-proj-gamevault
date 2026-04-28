@@ -126,6 +126,10 @@ Backend działa na http://127.0.0.1:8000
 Dokumentacja API dostępna na http://127.0.0.1:8000/docs
 
 ### Frontend
+Wymagania wstępne (Przed instalacją)
+Instalacja nodejs:
+Pobierz wersję **LTS** z [nodejs.org](https://nodejs.org/). 
+Jest on niezbędny do działania komend `npm install` oraz `npm start`.
 ```
 cd sklep
 npm run dev
