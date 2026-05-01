@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from database import get_db
 from models.user import User
-from auth import hash_password, verify_password, create_access_token
+from auth import hash_password, verify_password, create_access_token, verify_token
+from models.user import User
 import uuid
 
 router = APIRouter()
@@ -81,4 +82,34 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "user_id": str(user.id),
         "username": user.username,
         "role": user.role
+    }
+# GET /auth/me zwraca dane na podstawie tokenu JWT
+@router.get("/auth/me")
+def get_me(
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
+):
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Brak tokena autoryzacji")
+
+    token = authorization.replace("Bearer ", "")
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Nieprawidłowy token")
+
+    user_id = payload.get("sub")
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Użytkownik nie istnieje")
+
+    return {
+        "user_id": str(user.id),
+        "username": user.username,
+        "email": user.email,
+        "display_name": user.display_name,
+        "role": user.role,
+        "wallet_balance": float(user.wallet_balance),
+        "created_at": str(user.created_at)
     }
