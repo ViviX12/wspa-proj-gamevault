@@ -15,6 +15,7 @@ export default function App() {
   // Stan logowania
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [userRole, setUserRole] = useState(null); // 'admin' lub 'user'
 
   // Stan koszyka 
   const [cart, setCart] = useState([]);
@@ -44,10 +45,12 @@ export default function App() {
 
   // Wylogowanie
   const handleLogout = () => {
+    localStorage.removeItem('token'); // USUWA JWT!
     setIsLoggedIn(false);
     setUserName('');
+    setUserRole(null); // Reset roli
     setIsDropdownOpen(false);
-    setCart([]); // Czyścimy koszyk przy wylogowaniu
+    setCart([]);
     alert("Wylogowano pomyślnie.");
   };
 
@@ -138,7 +141,7 @@ export default function App() {
             <Route path="/game/:id" element={<Product addToCart={addToCart} />} />
             
             {/* Logowanie/Rejestracja */}
-            <Route path="/login" element={<Auth setIsLoggedIn={setIsLoggedIn} setUserName={setUserName} />} />
+            <Route path="/login" element={<Auth setIsLoggedIn={setIsLoggedIn} setUserName={setUserName} setUserRole={setUserRole} />} />
             
             {/* Koszyk */}
             <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />

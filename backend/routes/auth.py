@@ -59,6 +59,8 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 # Logowanie
 @router.post("/auth/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
+    print(f"DEBUG: Próba logowania dla: {request.email}")
+
     
     # Znajdź po emailu
     user = db.query(User).filter(User.email == request.email).first()
