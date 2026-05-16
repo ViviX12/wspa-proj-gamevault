@@ -28,10 +28,10 @@ GameVault to sklep internetowy z grami cyfrowymi. Użytkownicy mogą przegląda�
 
 ## Autorzy
 
-- Dawid Sałata nr albumu 21744
-- Krzysztof Sosnówka nr albumu 21752
-- Olaf Laszczowski nr albumu 22485
-- Maksym Jagodziński nr albumu 21648 – backend, baza danych
+- Dawid Sałata nr albumu 21744 - UI/UX Design
+- Krzysztof Sosnówka nr albumu 21752 - Frontend, HTML/CSS
+- Olaf Laszczowski nr albumu 22485 - Frontend, JavaScript
+- Maksym Jagodziński nr albumu 21648 – Backend, baza danych
 
 ---
 
