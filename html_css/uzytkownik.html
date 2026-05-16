@@ -33,20 +33,51 @@
         <main class="page-main user-main">
             <div class="main-inner">
                 <section class="user-section">
-                    <h1 class="user-title">Nazwa Użytkownika</h1>
-
-                    <div class="user-profile-row">
+                    <div class="user-profile-header">
                         <div class="profile-avatar-wrap">
-                            <div class="profile-avatar" aria-hidden="true">▣</div>
-                            <span class="profile-status">Zmień avatar</span>
+                            <div class="profile-avatar" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="5" width="18" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="8.5" cy="10" r="1.8" fill="currentColor"/>
+                                    <path d="M3 16l5-4 4 3 3-2 6 5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <a href="#" class="profile-change-avatar">Zmień avatar</a>
                         </div>
 
-                        <p class="profile-name">Nazwa Użytkownika ✎</p>
+                        <div class="profile-identity">
+                            <h1 class="profile-username">
+                                Nazwa Użytkownika
+                                <button type="button" class="profile-edit-btn" aria-label="Edytuj nazwę użytkownika">✎</button>
+                            </h1>
+                        </div>
                     </div>
 
                     <div class="user-divider"></div>
 
-                    <div class="user-content-placeholder" aria-hidden="true"></div>
+                    <ul class="user-details">
+                        <li>Data założenia konta: <span>01-01-1970</span></li>
+                        <li>Status konta: <span>Aktywne</span></li>
+                        <li class="user-detail-field">
+                            <span class="user-detail-label">Adres e-mail:</span>
+                            <div class="user-detail-row">
+                                <span class="user-detail-value">adres@email.com</span>
+                                <a href="#" class="user-change-link">Zmień <span aria-hidden="true">✎</span></a>
+                            </div>
+                        </li>
+                        <li class="user-detail-field">
+                            <span class="user-detail-label">Numer telefonu:</span>
+                            <div class="user-detail-row">
+                                <span class="user-detail-value">+00 ********12</span>
+                                <a href="#" class="user-change-link">Zmień <span aria-hidden="true">✎</span></a>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="user-actions">
+                        <a href="#" class="user-action-btn">Historia zakupów</a>
+                        <a href="#" class="user-action-btn">Preferencje sklepu</a>
+                    </div>
                 </section>
             </div>
         </main>
