@@ -85,5 +85,37 @@
             </div>
         </main>
     </div>
+
+    <div id="payment-redirect-overlay" class="payment-redirect-overlay" aria-hidden="true">
+        <div class="payment-redirect-card" role="status" aria-live="polite">
+            <p class="payment-redirect-text">
+                <span class="payment-redirect-line">Przekierowanie do serwisu</span>
+                <span class="payment-redirect-line">płatności</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var overlay = document.getElementById('payment-redirect-overlay');
+            var payBtn = document.querySelector('.cart-pay-btn');
+            if (!overlay || !payBtn) return;
+
+            var redirectMs = 2200;
+            var paymentUrl = 'https://secure.payu.com/pl/';
+
+            payBtn.addEventListener('click', function () {
+                if (payBtn.disabled) return;
+                payBtn.disabled = true;
+                overlay.classList.add('is-open');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('payment-redirect-active');
+
+                window.setTimeout(function () {
+                    window.location.href = paymentUrl;
+                }, redirectMs);
+            });
+        })();
+    </script>
 </body>
 </html>
