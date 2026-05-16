@@ -7,7 +7,6 @@ const imageMapper = {
   "Counter-Strike 2": "/img/gra6.jpg", "Hogwarts Legacy": "/img/gra7.jpg", "Minecraft": "/img/gra8.jpg"
 };
 
-// Dodano odbieranie searchQuery (domyślnie pusty ciąg, żeby nie rzucało błędami)
 export default function Library({ searchQuery = "" }) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);

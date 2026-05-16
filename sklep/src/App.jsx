@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import Shop from './components/Shop';
 import Library from './components/Library';
 import Product from './components/Product';
@@ -8,19 +8,52 @@ import Cart from './components/Cart';
 import './style.css';
 
 export default function App() {
-  // STANY GLOBALNE 
+  const navigate = useNavigate();
+
+  // --- STANY GLOBALNE ---
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
-  // Stan logowania
+  // Stan logowania i dane użytkownika
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
-  const [userRole, setUserRole] = useState(null); // 'admin' lub 'user'
+  const [userRole, setUserRole] = useState(null); 
+  const [userId, setUserId] = useState(null); // Stan na ID użytkownika z backendu
 
   // Stan koszyka 
   const [cart, setCart] = useState([]);
 
-  //LOGIKA BIZNESOWA 
+  // --- LOGIKA SESJI (AUTO-LOGOWANIE PO ODŚWIEŻENIU) ---
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Sprawdzamy czy token jest ważny i pobieramy dane użytkownika
+      fetch('http://localhost:8000/auth/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Sesja wygasła');
+        return res.json();
+      })
+      .then(userData => {
+        // Ustawiamy dane w aplikacji
+        setIsLoggedIn(true);
+        setUserName(userData.display_name || userData.username);
+        setUserRole(userData.role);
+        setUserId(userData.user_id); // To kluczowa zmiana pod Twoje API!
+      })
+      .catch(() => {
+        // Jeśli błąd (np. wygasł token), czyścimy dane
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        setUserName('');
+        setUserRole(null);
+        setUserId(null);
+      });
+    }
+  }, []);
+
+  // --- LOGIKA BIZNESOWA ---
 
   // Dodawanie do koszyka
   const addToCart = (game) => {
@@ -37,82 +70,74 @@ export default function App() {
     setCart(cart.filter(item => item.id !== gameId));
   };
 
-  // Nawigacja (resetowanie wyszukiwania i scroll do góry)
-  const handleAsyncNavigation = () => {
-    setGlobalSearchQuery('');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Czyszczenie koszyka (wywoływane po udanym zakupie w Cart.jsx)
+  const clearCart = () => {
+    setCart([]);
   };
 
   // Wylogowanie
   const handleLogout = () => {
-    localStorage.removeItem('token'); // USUWA JWT!
+    localStorage.removeItem('token');
     setIsLoggedIn(false);
     setUserName('');
-    setUserRole(null); // Reset roli
+    setUserRole(null);
+    setUserId(null);
     setIsDropdownOpen(false);
-    setCart([]);
-    alert("Wylogowano pomyślnie.");
+    navigate('/');
+  };
+
+  const handleAsyncNavigation = () => {
+    setIsDropdownOpen(false);
   };
 
   return (
     <div className="page">
-      {/*NAGŁÓWEK (ZGODNY Z FIGMĄ)*/}
       <header className="header">
         <div className="header-inner">
           <Link to="/" className="logo" onClick={handleAsyncNavigation}>
-            <span className="game">GAME</span><span className="vault">VAULT</span>
+            <span className="game">Game</span><span className="vault">Vault</span>
           </Link>
 
           <nav className="nav">
-            <Link to="/" onClick={handleAsyncNavigation}>SKLEP</Link>
-            {isLoggedIn && (
-              <Link to="/library" onClick={handleAsyncNavigation}>BIBLIOTEKA</Link>
-            )}
-            <Link to="/cart" onClick={handleAsyncNavigation} style={{ color: cart.length > 0 ? '#7bc043' : '' }}>
-              KOSZYK {cart.length > 0 && `(${cart.length})`}
-            </Link>
+            <Link to="/" className={window.location.pathname === '/' ? 'nav-active' : ''}>Sklep</Link>
+            <Link to="/library" className={window.location.pathname === '/library' ? 'nav-active' : ''}>Biblioteka</Link>
+            
           </nav>
 
-          <input 
-            type="text" 
-            className="search" 
-            placeholder="Szukaj gier..." 
-            value={globalSearchQuery}
-            onChange={(e) => setGlobalSearchQuery(e.target.value)}
-          />
+          <div className="search-wrap">
+             <input 
+              id="main-search"
+              name="search"
+              className="search" 
+              type="text" 
+              placeholder="Szukaj gier..." 
+              value={globalSearchQuery}
+              onChange={(e) => setGlobalSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="cart-nav">
+             <Link to="/cart" className="cart-link">
+                🛒 Koszyk ({cart.length})
+             </Link>
+          </div>
 
           {isLoggedIn ? (
-            <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              {/* Ikonka powiadomień */}
-              <div style={{ cursor: 'pointer', fontSize: '18px' }}>🔔</div>
-
-              {/* Panel Użytkownika z Awatarem */}
-              <div 
-                style={{ position: 'relative', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }} 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <span style={{ fontWeight: '500' }}>{userName} ▼</span>
-                
-                {/* Awatar z inicjałem */}
-                <div style={{ 
-                  width: '35px', height: '35px', borderRadius: '50%', background: '#7bc043', 
-                  display: 'flex', justifyContent: 'center', alignItems: 'center', 
-                  color: '#fff', fontWeight: 'bold', fontSize: '16px' 
-                }}>
-                  {userName.charAt(0).toUpperCase()}
+            <div className="header-right">
+              <div className="user-profile-container">
+                <div 
+                  className="user-profile-trigger" 
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  <span className="user-name">{userName}</span>
+                  <span className="user-avatar">👤</span>
                 </div>
-
-                {/* Dropdown menu */}
+                
                 {isDropdownOpen && (
-                  <div style={{ 
-                    position: 'absolute', top: '120%', right: 0, background: '#172230', 
-                    padding: '10px', zIndex: 100, borderRadius: '4px', minWidth: '150px',
-                    border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 10px 20px rgba(0,0,0,0.5)'
-                  }}>
-                    <div className="dropdown-item" style={{ padding: '8px', cursor: 'pointer' }}>Mój profil</div>
-                    <div className="dropdown-item" style={{ padding: '8px', cursor: 'pointer', color: '#ff4d4d' }} onClick={handleLogout}>
-                      Wyloguj
-                    </div>
+                  <div className="user-dropdown">
+                    <Link to="/profile" onClick={() => setIsDropdownOpen(false)}>Mój profil</Link>
+                    {userRole === 'admin' && <Link to="/admin" onClick={() => setIsDropdownOpen(false)}>Panel Admina</Link>}
+                    <button onClick={handleLogout} className="logout-btn">Wyloguj się</button>
                   </div>
                 )}
               </div>
@@ -125,28 +150,30 @@ export default function App() {
         </div>
       </header>
 
-      {/*GŁÓWNA TREŚĆ (ROUTING)*/}
       <main className="page-main">
         <div className="main-inner">
           <Routes>
-            {/* Sklep */}
             <Route path="/" element={<Shop searchQuery={globalSearchQuery} />} />
             
-            {/* Biblioteka (Chroniona: tylko dla zalogowanych) */}
             <Route path="/library" element={
               isLoggedIn ? <Library searchQuery={globalSearchQuery} /> : <Navigate to="/login" />
             } />
             
-            {/* Szczegóły produktu */}
             <Route path="/game/:id" element={<Product addToCart={addToCart} />} />
             
-            {/* Logowanie/Rejestracja */}
-            <Route path="/login" element={<Auth setIsLoggedIn={setIsLoggedIn} setUserName={setUserName} setUserRole={setUserRole} />} />
+            <Route path="/login" element={
+              <Auth 
+                setIsLoggedIn={setIsLoggedIn} 
+                setUserName={setUserName} 
+                setUserRole={setUserRole} 
+                setUserId={setUserId} 
+              />
+            } />
             
-            {/* Koszyk */}
-            <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />
+            <Route path="/cart" element={
+              <Cart cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} />
+            } />
             
-            {/* Catch-all: powrót do sklepu jeśli ścieżka nie istnieje */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
