@@ -85,12 +85,18 @@ def create_order(
         )
         db.add(order_item)
         
-        library_item = Library(
-            id=uuid.uuid4(),
-            user_id=user_id,
-            product_id=item_data["product"].id
-        )
-        db.add(library_item)
+        existing = db.query(Library).filter(
+            Library.user_id == user_id,
+            Library.product_id == item_data["product"].id
+        ).first()
+
+        if not existing:
+            library_item = Library(
+                id=uuid.uuid4(),
+                user_id=user_id,
+                product_id=item_data["product"].id
+            )
+            db.add(library_item)
     
     db.commit()
     

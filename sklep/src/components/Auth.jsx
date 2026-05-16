@@ -60,6 +60,7 @@ export default function Auth({ setIsLoggedIn, setUserName, setUserRole }) {
 
       const userData = await meResponse.json();
 
+      localStorage.setItem('user_id', userData.user_id);
       setIsLoggedIn(true);
       setUserName(userData.display_name || userData.username);
       setUserRole(userData.role);

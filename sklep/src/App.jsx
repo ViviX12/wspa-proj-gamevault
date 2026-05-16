@@ -7,81 +7,153 @@ import Auth from './components/Auth';
 import Cart from './components/Cart';
 import './style.css';
 
+// Komponent Toast - wyskakuje w prawym dolnym rogu
+function Toast({ message, type, onClose }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const colors = {
+    success: { bg: "#7bc043", icon: "✔" },
+    error:   { bg: "#ff4d4d", icon: "✖" },
+    info:    { bg: "#2563EB", icon: "ℹ" },
+    warning: { bg: "#F5C518", icon: "⚠" },
+  };
+
+  const c = colors[type] || colors.info;
+
+  return (
+    <>
+      <style>{`
+        @keyframes slideInToast {
+          from { opacity: 0; transform: translateX(60px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+      `}</style>
+      <div style={{
+        position: "fixed",
+        bottom: "30px",
+        right: "30px",
+        background: c.bg,
+        color: "#fff",
+        padding: "14px 20px",
+        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        fontSize: "15px",
+        fontWeight: "bold",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+        zIndex: 9999,
+        minWidth: "280px",
+        maxWidth: "380px",
+        animation: "slideInToast 0.3s ease",
+      }}>
+        <span style={{ fontSize: "18px" }}>{c.icon}</span>
+        <span style={{ flex: 1 }}>{message}</span>
+        <button
+          onClick={onClose}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "#fff",
+            fontSize: "20px",
+            cursor: "pointer",
+            lineHeight: 1,
+            padding: 0,
+            opacity: 0.8
+          }}
+        >x</button>
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   const navigate = useNavigate();
 
-  // --- STANY GLOBALNE ---
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
-  // Stan logowania i dane użytkownika
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState(null); 
-  const [userId, setUserId] = useState(null); // Stan na ID użytkownika z backendu
-
-  // Stan koszyka 
+  const [userId, setUserId] = useState(null);
+  const [userLibrary, setUserLibrary] = useState([]);
   const [cart, setCart] = useState([]);
+  const [toast, setToast] = useState(null);
 
-  // --- LOGIKA SESJI (AUTO-LOGOWANIE PO ODŚWIEŻENIU) ---
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+  };
+
+  const hideToast = () => setToast(null);
+
+  const fetchLibrary = (uid, token) => {
+    fetch(`http://localhost:8000/library/${uid}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => setUserLibrary(data.map(g => g.product_id)))
+      .catch(() => {});
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Sprawdzamy czy token jest ważny i pobieramy dane użytkownika
       fetch('http://localhost:8000/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
-        if (!res.ok) throw new Error('Sesja wygasła');
+        if (!res.ok) throw new Error('Sesja wygasla');
         return res.json();
       })
       .then(userData => {
-        // Ustawiamy dane w aplikacji
         setIsLoggedIn(true);
         setUserName(userData.display_name || userData.username);
         setUserRole(userData.role);
-        setUserId(userData.user_id); // To kluczowa zmiana pod Twoje API!
+        setUserId(userData.user_id);
+        fetchLibrary(userData.user_id, token);
       })
       .catch(() => {
-        // Jeśli błąd (np. wygasł token), czyścimy dane
         localStorage.removeItem('token');
         setIsLoggedIn(false);
         setUserName('');
         setUserRole(null);
         setUserId(null);
+        setUserLibrary([]);
       });
     }
   }, []);
 
-  // --- LOGIKA BIZNESOWA ---
-
-  // Dodawanie do koszyka
   const addToCart = (game) => {
     if (!cart.find(item => item.id === game.id)) {
       setCart([...cart, game]);
-      alert(`Dodano "${game.title}" do koszyka!`);
+      showToast(`Dodano "${game.title}" do koszyka!`, "success");
     } else {
-      alert(`Gra "${game.title}" jest już w Twoim koszyku.`);
+      showToast(`Gra "${game.title}" jest juz w koszyku.`, "warning");
     }
   };
 
-  // Usuwanie z koszyka
   const removeFromCart = (gameId) => {
     setCart(cart.filter(item => item.id !== gameId));
   };
 
-  // Czyszczenie koszyka (wywoływane po udanym zakupie w Cart.jsx)
   const clearCart = () => {
     setCart([]);
+    const token = localStorage.getItem('token');
+    const uid = localStorage.getItem('user_id');
+    if (token && uid) fetchLibrary(uid, token);
   };
 
-  // Wylogowanie
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
     setIsLoggedIn(false);
     setUserName('');
     setUserRole(null);
     setUserId(null);
+    setUserLibrary([]);
     setIsDropdownOpen(false);
     navigate('/');
   };
@@ -92,6 +164,15 @@ export default function App() {
 
   return (
     <div className="page">
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
+      )}
+
       <header className="header">
         <div className="header-inner">
           <Link to="/" className="logo" onClick={handleAsyncNavigation}>
@@ -101,11 +182,10 @@ export default function App() {
           <nav className="nav">
             <Link to="/" className={window.location.pathname === '/' ? 'nav-active' : ''}>Sklep</Link>
             <Link to="/library" className={window.location.pathname === '/library' ? 'nav-active' : ''}>Biblioteka</Link>
-            
           </nav>
 
           <div className="search-wrap">
-             <input 
+            <input 
               id="main-search"
               name="search"
               className="search" 
@@ -117,9 +197,9 @@ export default function App() {
           </div>
 
           <div className="cart-nav">
-             <Link to="/cart" className="cart-link">
-                🛒 Koszyk ({cart.length})
-             </Link>
+            <Link to="/cart" className="cart-link">
+              Koszyk ({cart.length})
+            </Link>
           </div>
 
           {isLoggedIn ? (
@@ -130,21 +210,21 @@ export default function App() {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
                   <span className="user-name">{userName}</span>
-                  <span className="user-avatar">👤</span>
+                  <span className="user-avatar">T</span>
                 </div>
                 
                 {isDropdownOpen && (
                   <div className="user-dropdown">
-                    <Link to="/profile" onClick={() => setIsDropdownOpen(false)}>Mój profil</Link>
+                    <Link to="/profile" onClick={() => setIsDropdownOpen(false)}>Moj profil</Link>
                     {userRole === 'admin' && <Link to="/admin" onClick={() => setIsDropdownOpen(false)}>Panel Admina</Link>}
-                    <button onClick={handleLogout} className="logout-btn">Wyloguj się</button>
+                    <button onClick={handleLogout} className="logout-btn">Wyloguj sie</button>
                   </div>
                 )}
               </div>
             </div>
           ) : (
             <div className="header-right">
-              <Link to="/login" className="login-link active" onClick={handleAsyncNavigation}>Zaloguj się</Link>
+              <Link to="/login" className="login-link active" onClick={handleAsyncNavigation}>Zaloguj sie</Link>
             </div>
           )}
         </div>
@@ -159,14 +239,17 @@ export default function App() {
               isLoggedIn ? <Library searchQuery={globalSearchQuery} /> : <Navigate to="/login" />
             } />
             
-            <Route path="/game/:id" element={<Product addToCart={addToCart} />} />
+            <Route path="/game/:id" element={
+              <Product addToCart={addToCart} userLibrary={userLibrary} />
+            } />
             
             <Route path="/login" element={
               <Auth 
                 setIsLoggedIn={setIsLoggedIn} 
                 setUserName={setUserName} 
                 setUserRole={setUserRole} 
-                setUserId={setUserId} 
+                setUserId={setUserId}
+                fetchLibrary={fetchLibrary}
               />
             } />
             

@@ -1,23 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+// Komponent Toast
+function Toast({ message, type, onClose }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const colors = {
+    success: { bg: "#7bc043", icon: "✔" },
+    error:   { bg: "#ff4d4d", icon: "✖" },
+    warning: { bg: "#F5C518", icon: "⚠" },
+  };
+
+  const c = colors[type] || colors.error;
+
+  return (
+    <>
+      <style>{`
+        @keyframes slideInCart {
+          from { opacity: 0; transform: translateX(60px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+      `}</style>
+      <div style={{
+        position: "fixed",
+        bottom: "30px",
+        right: "30px",
+        background: c.bg,
+        color: "#fff",
+        padding: "14px 20px",
+        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        fontSize: "15px",
+        fontWeight: "bold",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+        zIndex: 9999,
+        minWidth: "280px",
+        maxWidth: "380px",
+        animation: "slideInCart 0.3s ease",
+      }}>
+        <span style={{ fontSize: "18px" }}>{c.icon}</span>
+        <span style={{ flex: 1 }}>{message}</span>
+        <button onClick={onClose} style={{
+          background: "transparent", border: "none", color: "#fff",
+          fontSize: "20px", cursor: "pointer", lineHeight: 1, padding: 0, opacity: 0.8
+        }}>×</button>
+      </div>
+    </>
+  );
+}
 
 export default function Cart({ cart, removeFromCart, clearCart }) {
   const totalPrice = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
-  const [purchaseStatus, setPurchaseStatus] = useState(null); // 'success' lub 'error: komunikat'
+  const [purchaseStatus, setPurchaseStatus] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+  };
+
+  const hideToast = () => setToast(null);
 
   const handlePurchase = async () => {
     const token = localStorage.getItem('token');
     
     if (!token) {
-      alert("Musisz być zalogowany, aby dokonać zakupu!");
+      showToast("Musisz być zalogowany, aby dokonać zakupu!", "warning");
       return;
     }
 
-    
     const itemIds = cart.map(item => ({ product_id: item.id }));
 
     try {
-      
       const response = await fetch('http://localhost:8000/orders', {
         method: 'POST',
         headers: {
@@ -32,27 +90,31 @@ export default function Cart({ cart, removeFromCart, clearCart }) {
 
       if (response.ok) {
         setPurchaseStatus('success');
-        clearCart(); // Czyścimy koszyk po stronie App.jsx
+        showToast("Zakup udany! Gry dodano do biblioteki.", "success");
+        clearCart();
       } else {
         const errorData = await response.json();
-        
-        // Rozszyfrowujemy błędy od FastAPI
         let errorMsg = 'Wystąpił problem z zakupem';
         if (errorData.detail) {
-          errorMsg = typeof errorData.detail === 'string' 
-            ? errorData.detail 
-            : JSON.stringify(errorData.detail); // Zamienia obiekty na czytelny JSON
+          errorMsg = typeof errorData.detail === 'string'
+            ? errorData.detail
+            : JSON.stringify(errorData.detail);
         }
-        
         setPurchaseStatus(`error: ${errorMsg}`);
+        showToast(errorMsg, "error");
       }
     } catch (error) {
       setPurchaseStatus('error: Brak połączenia z serwerem backendu');
+      showToast("Brak połączenia z serwerem backendu.", "error");
     }
   };
 
   return (
     <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', color: '#fff', width: '100%' }}>
+
+      {/* Toast notification */}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
+
       <h1 style={{ marginBottom: '30px', fontSize: '28px' }}>Twój Koszyk</h1>
 
       {cart.length === 0 && purchaseStatus !== 'success' ? (
@@ -104,13 +166,6 @@ export default function Cart({ cart, removeFromCart, clearCart }) {
                 <strong style={{ color: '#7bc043' }}>{totalPrice} zł</strong>
               </div>
 
-              {/* Komunikat o błędzie */}
-              {purchaseStatus && purchaseStatus.startsWith('error') && (
-                <div style={{ background: '#ff4d4d', color: 'white', padding: '10px', borderRadius: '4px', marginBottom: '15px', fontSize: '14px' }}>
-                  {purchaseStatus.split(': ')[1]}
-                </div>
-              )}
-              
               <button 
                 style={{ 
                   width: '100%', padding: '15px', background: '#7bc043', color: '#fff', border: 'none', 
