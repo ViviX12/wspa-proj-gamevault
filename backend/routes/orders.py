@@ -7,26 +7,18 @@ from models.order import Order, OrderItem
 from models.library import Library
 from models.product import Product
 from auth import verify_token
-from fastapi import Header
 import uuid
+import logging
 
 router = APIRouter()
+logger = logging.getLogger("gamevault")
 
-# Schemat co frontend wysyła przy zakupie
 class OrderItemRequest(BaseModel):
     product_id: str
 
 class CreateOrderRequest(BaseModel):
     items: List[OrderItemRequest]
 
-def get_current_user(token: str, db: Session):
-    """Weryfikuje token JWT i zwraca dane użytkownika"""
-    payload = verify_token(token)
-    if not payload:
-        raise HTTPException(status_code=401, detail="Nieprawidłowy token")
-    return payload
-
-# POST /orders
 @router.post("/orders")
 def create_order(
     request: CreateOrderRequest,
@@ -34,36 +26,33 @@ def create_order(
     db: Session = Depends(get_db)
 ):
     if not authorization or not authorization.startswith("Bearer "):
+        logger.warning("ZAKUP | FAIL | brak tokena autoryzacji")
         raise HTTPException(status_code=401, detail="Brak tokena autoryzacji")
-    
+
     token = authorization.replace("Bearer ", "")
     payload = verify_token(token)
     if not payload:
+        logger.warning("ZAKUP | FAIL | nieprawidlowy token")
         raise HTTPException(status_code=401, detail="Nieprawidłowy token")
-    
+
     user_id = payload.get("sub")
-    
+
     total = 0
     order_items_data = []
-    
+
     for item in request.items:
-        product = db.query(Product).filter(
-            Product.id == item.product_id
-        ).first()
-        
+        product = db.query(Product).filter(Product.id == item.product_id).first()
+
         if not product:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Produkt {item.product_id} nie istnieje"
-            )
-        
+            logger.warning(f"ZAKUP | FAIL | user_id: {user_id} | produkt nie istnieje: {item.product_id}")
+            raise HTTPException(status_code=404, detail=f"Produkt {item.product_id} nie istnieje")
+
         total += float(product.current_price)
         order_items_data.append({
             "product": product,
             "price": product.current_price
         })
-    
-    # Stwórz zamówienie
+
     order_number = f"GV-{uuid.uuid4().hex[:8].upper()}"
     new_order = Order(
         id=uuid.uuid4(),
@@ -75,7 +64,8 @@ def create_order(
     )
     db.add(new_order)
     db.flush()
-    
+
+    purchased_titles = []
     for item_data in order_items_data:
         order_item = OrderItem(
             id=uuid.uuid4(),
@@ -84,7 +74,7 @@ def create_order(
             price=item_data["price"]
         )
         db.add(order_item)
-        
+
         existing = db.query(Library).filter(
             Library.user_id == user_id,
             Library.product_id == item_data["product"].id
@@ -97,9 +87,14 @@ def create_order(
                 product_id=item_data["product"].id
             )
             db.add(library_item)
-    
+            purchased_titles.append(item_data["product"].tytul)
+        else:
+            logger.warning(f"ZAKUP | DUPLIKAT | user_id: {user_id} | produkt: {item_data['product'].tytul} juz w bibliotece")
+
     db.commit()
-    
+
+    logger.info(f"ZAKUP | OK | user_id: {user_id} | zamowienie: {order_number} | produkty: {purchased_titles} | kwota: {total} PLN")
+
     return {
         "message": "Zakup udany!",
         "order_number": order_number,
@@ -107,12 +102,12 @@ def create_order(
         "items_purchased": len(order_items_data)
     }
 
-# GET /orders/{user_id}
-# Historia zamówień użytkownika
 @router.get("/orders/{user_id}")
 def get_orders(user_id: str, db: Session = Depends(get_db)):
     orders = db.query(Order).filter(Order.user_id == user_id).all()
-    
+
+    logger.info(f"HISTORIA ZAMOWIEN | user_id: {user_id} | liczba zamowien: {len(orders)}")
+
     result = []
     for order in orders:
         result.append({
@@ -122,20 +117,19 @@ def get_orders(user_id: str, db: Session = Depends(get_db)):
             "total_amount": float(order.total_amount),
             "created_at": str(order.created_at)
         })
-    
+
     return result
 
-# GET /library/{user_id}
 @router.get("/library/{user_id}")
 def get_library(user_id: str, db: Session = Depends(get_db)):
     library = db.query(Library).filter(Library.user_id == user_id).all()
-    
+
+    logger.info(f"BIBLIOTEKA | user_id: {user_id} | liczba gier: {len(library)}")
+
     result = []
     for item in library:
-        product = db.query(Product).filter(
-            Product.id == item.product_id
-        ).first()
-        
+        product = db.query(Product).filter(Product.id == item.product_id).first()
+
         result.append({
             "library_id": str(item.id),
             "product_id": str(item.product_id),
@@ -144,5 +138,5 @@ def get_library(user_id: str, db: Session = Depends(get_db)):
             "installed": item.installed,
             "created_at": str(item.created_at)
         })
-    
+
     return result

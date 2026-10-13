@@ -1,0 +1,46 @@
+2026-10-13 15:53:19 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:53:38 | WARNING | LOGOWANIE | FAIL | nie znaleziono uzytkownika: film@gamevault.pl
+2026-10-13 15:53:38 | INFO | HTTP | POST /auth/login | status: 401 | client: 127.0.0.1
+2026-10-13 15:57:31 | INFO | HTTP | OPTIONS /auth/register | status: 200 | client: 127.0.0.1
+2026-10-13 15:57:32 | INFO | REJESTRACJA | OK | user_id: bae49f60-cfb2-494b-8e60-bd28e3af3a18 | username: filmuser | email: film@gamevault.pl
+2026-10-13 15:57:32 | INFO | HTTP | POST /auth/register | status: 200 | client: 127.0.0.1
+2026-10-13 15:57:42 | INFO | HTTP | OPTIONS /auth/login | status: 200 | client: 127.0.0.1
+2026-10-13 15:57:42 | WARNING | LOGOWANIE | FAIL | nie znaleziono uzytkownika: filmuser
+2026-10-13 15:57:42 | INFO | HTTP | POST /auth/login | status: 401 | client: 127.0.0.1
+2026-10-13 15:57:50 | WARNING | LOGOWANIE | FAIL | nie znaleziono uzytkownika: filmuser
+2026-10-13 15:57:50 | INFO | HTTP | POST /auth/login | status: 401 | client: 127.0.0.1
+2026-10-13 15:58:45 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:58:45 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:14 | INFO | REJESTRACJA | OK | user_id: b08ec1e7-617d-4cb1-9ed0-7a7ef88ef2be | username: filmuser1 | email: filmuser1@gamevault.com
+2026-10-13 15:59:14 | INFO | HTTP | POST /auth/register | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:26 | INFO | LOGOWANIE | OK | user_id: b08ec1e7-617d-4cb1-9ed0-7a7ef88ef2be | username: filmuser1 | rola: user
+2026-10-13 15:59:26 | INFO | HTTP | POST /auth/login | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:26 | INFO | HTTP | OPTIONS /auth/me | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:26 | INFO | AUTH/ME | OK | user_id: b08ec1e7-617d-4cb1-9ed0-7a7ef88ef2be | username: filmuser1
+2026-10-13 15:59:26 | INFO | HTTP | GET /auth/me | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:28 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:28 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:33 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:33 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:35 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 15:59:35 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 16:02:26 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 16:02:26 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 16:02:49 | INFO | REJESTRACJA | OK | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | username: filmuser12 | email: film1@gamevault.pl
+2026-10-13 16:02:49 | INFO | HTTP | POST /auth/register | status: 200 | client: 127.0.0.1
+2026-10-13 16:02:59 | INFO | LOGOWANIE | OK | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | username: filmuser12 | rola: user
+2026-10-13 16:02:59 | INFO | HTTP | POST /auth/login | status: 200 | client: 127.0.0.1
+2026-10-13 16:02:59 | INFO | AUTH/ME | OK | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | username: filmuser12
+2026-10-13 16:02:59 | INFO | HTTP | GET /auth/me | status: 200 | client: 127.0.0.1
+2026-10-13 16:03:00 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 16:03:00 | INFO | HTTP | GET /products | status: 200 | client: 127.0.0.1
+2026-10-13 16:03:36 | INFO | LOGOWANIE | OK | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | username: filmuser12 | rola: user
+2026-10-13 16:03:36 | INFO | HTTP | POST /auth/login | status: 200 | client: 127.0.0.1
+2026-10-13 16:04:19 | INFO | ZAKUP | OK | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | zamowienie: GV-431D1363 | produkty: ['Cyberpunk 2077'] | kwota: 99.99 PLN
+2026-10-13 16:04:19 | INFO | HTTP | POST /orders | status: 200 | client: 127.0.0.1
+2026-10-13 16:04:24 | INFO | HTTP | OPTIONS /library/89e6ab15-34d0-4449-9613-6bedbf7ab813 | status: 200 | client: 127.0.0.1
+2026-10-13 16:04:24 | INFO | HTTP | OPTIONS /library/89e6ab15-34d0-4449-9613-6bedbf7ab813 | status: 200 | client: 127.0.0.1
+2026-10-13 16:04:24 | INFO | BIBLIOTEKA | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | liczba gier: 1
+2026-10-13 16:04:24 | INFO | HTTP | GET /library/89e6ab15-34d0-4449-9613-6bedbf7ab813 | status: 200 | client: 127.0.0.1
+2026-10-13 16:04:24 | INFO | BIBLIOTEKA | user_id: 89e6ab15-34d0-4449-9613-6bedbf7ab813 | liczba gier: 1
+2026-10-13 16:04:24 | INFO | HTTP | GET /library/89e6ab15-34d0-4449-9613-6bedbf7ab813 | status: 200 | client: 127.0.0.1
